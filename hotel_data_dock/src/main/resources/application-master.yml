@@ -1,0 +1,48 @@
+
+server:
+  port: 8081
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/hotel_data_db?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: root
+    password: Ygf@337733
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone:  GMT+8
+    #设置空如何序列化
+    defaultPropertyInclusion: NON_NULL
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false # 这个开发配置为false，避免改了模板还要重启服务器
+    suffix: .html #模板文件视图后缀，默认是.html，可不用配置
+    encoding: utf-8  #编码字符集，默认为utf-8，可不用配置
+    servlet:
+      content-type: text/html       #模板的内容类型，默认为text/html，可不用配置
+  mvc:
+    view:
+      suffix: .html
+    static-path-pattern: /static/**
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+
+rubber:
+  security:
+    openInterfaceAuth: false
+    permitAll: /login,/test/sys-time,/home
+    logUrl: /logout
+    defaultPermissionUrl: /u/*
+  task:
+    openTask: true
+    afterDaySize: 20
+
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**Mapper.xml
+
+
