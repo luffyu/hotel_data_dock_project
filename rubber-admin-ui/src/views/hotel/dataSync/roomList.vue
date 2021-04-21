@@ -35,15 +35,29 @@
             <el-table-column
                     prop="lastSyncTime"
                     label="最后一次同步时间"
-                    min-width="200" >
+                    min-width="100" >
             </el-table-column>
 
             <el-table-column
                     prop="lastSyncInfo"
+                    min-width="150"
                     label="最后一次同步信息">
                 <template slot-scope="scope" >
                     <span>{{showSyncInfo(scope.row.lastSyncInfo)}}</span>
 
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    prop="floatPrice"
+                    label="价格浮动"
+                    width="80"
+                    >
+                <template slot-scope="scope" >
+                    <span>
+                        {{scope.row.floatType === 'add' ? '+':'-'}}
+                        {{scope.row.floatPrice}}元
+                    </span>
                 </template>
             </el-table-column>
 

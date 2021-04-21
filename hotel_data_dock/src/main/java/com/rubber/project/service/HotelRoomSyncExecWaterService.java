@@ -117,7 +117,10 @@ public class HotelRoomSyncExecWaterService extends BaseAdminService<HotelRoomSyn
             LtRoomDict ltRoomDict = syncRoomCreatModel.getLtRoomDict();
             if (ltRoomDict != null) {
                 ltRoomId = ltRoomDict.getLtRoomId() + "_" + ltRoomDict.getLtPlatKey();
+                roomSyncExecWater.setFloatPrice(ltRoomDict.getFloatPrice());
+                roomSyncExecWater.setFloatType(ltRoomDict.getFloatType());
             }
+            roomSyncExecWater.setOriginPrice(syncRoomCreatModel.getOriginPrice());
             roomSyncExecWater.setRoomIdInfo(ltRoomId + " to " + xcRoomId);
             roomSyncExecWater.setSyncRequestInfo(requestInfo);
 

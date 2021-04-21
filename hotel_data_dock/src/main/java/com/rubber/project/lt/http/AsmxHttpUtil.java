@@ -36,8 +36,8 @@ public class AsmxHttpUtil {
      * 可以通过 http://202.104.101.32:8077/RESTServer.asmx?wsdl 来查看暴露的服务
      * 正式环境地址为：http://lvtianxia.dingfangyi.com/RESTSERVER.asmx
      */
-    //private final static String URL = "http://202.104.101.32:8077/RESTServer.asmx";
-    private final static String URL = "http://lvtianxia.dingfangyi.com/RESTSERVER.asmx";
+    private final static String URL = "http://202.104.101.32:8077/RESTServer.asmx";
+    //private final static String URL = "http://lvtianxia.dingfangyi.com/RESTSERVER.asmx";
     private final static String SOAP_ACTION = "http://tempuri.org/GetXmlData";
     private final static String TARGET_NAMESPACE = "http://tempuri.org/";
     private final static String OPTION_NAME = "GetXmlData";
@@ -136,18 +136,18 @@ public class AsmxHttpUtil {
 
         Element identityInfo = root.addElement("IdentityInfo");
         //测试环境1
-//        identityInfo.addElement("AppId").setText("1");
-//        identityInfo.addElement("SecurityKey").setText("369b469c-51b2-43cd-9677-934ca17f2651");
-//        identityInfo.addElement("UserName").setText("EN000001");
-//        identityInfo.addElement("PassWord").setText("E10ADC3949BA59ABBE56E057F20F883E");
-//        identityInfo.addElement("Signature").setText("RU4wMDAwMDFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRTM2OWI0NjljLTUxYjItNDNjZC05Njc3LTkzNGNhMTdmMjY1MQ==");
+        identityInfo.addElement("AppId").setText("1");
+        identityInfo.addElement("SecurityKey").setText("369b469c-51b2-43cd-9677-934ca17f2651");
+        identityInfo.addElement("UserName").setText("EN000001");
+        identityInfo.addElement("PassWord").setText("E10ADC3949BA59ABBE56E057F20F883E");
+        identityInfo.addElement("Signature").setText("RU4wMDAwMDFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRTM2OWI0NjljLTUxYjItNDNjZC05Njc3LTkzNGNhMTdmMjY1MQ==");
 
         //正式环境s
-        identityInfo.addElement("AppId").setText("707");
-        identityInfo.addElement("SecurityKey").setText("d34ff5c2-6aa0-481d-a4df-72f6945b0005");
-        identityInfo.addElement("UserName").setText("BG100011");
-        identityInfo.addElement("PassWord").setText("e10adc3949ba59abbe56e057f20f883e");
-        identityInfo.addElement("Signature").setText("QkcxMDAwMTFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRWQzNGZmNWMyLTZhYTAtNDgxZC1hNGRmLTcyZjY5NDViMDAwNQ==");
+//        identityInfo.addElement("AppId").setText("707");
+//        identityInfo.addElement("SecurityKey").setText("d34ff5c2-6aa0-481d-a4df-72f6945b0005");
+//        identityInfo.addElement("UserName").setText("BG100011");
+//        identityInfo.addElement("PassWord").setText("e10adc3949ba59abbe56e057f20f883e");
+//        identityInfo.addElement("Signature").setText("QkcxMDAwMTFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRWQzNGZmNWMyLTZhYTAtNDgxZC1hNGRmLTcyZjY5NDViMDAwNQ==");
 
         Element scrollingInfo = root.addElement("ScrollingInfo");
         //50:默认;40;全部查询;30:分页查询

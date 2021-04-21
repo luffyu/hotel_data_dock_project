@@ -61,4 +61,10 @@ public class SyncRoomCreatModel {
 
     private String responseData;
 
+
+    /**
+     * 原始价格
+     */
+    private Double originPrice;
+
 }

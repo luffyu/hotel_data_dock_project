@@ -96,6 +96,21 @@ public class HotelRoomSyncExecWater extends BaseEntity {
     private Long execTime;
 
     /**
+     * 数据源价格
+     */
+    private Double originPrice;
+
+    /**
+     * 浮动的价格
+     */
+    private Double floatPrice;
+
+    /**
+     * add表示新增 reduce表示减少
+     */
+    private String floatType;
+
+    /**
      * 推送的价格
      */
     private Double pushPrice;

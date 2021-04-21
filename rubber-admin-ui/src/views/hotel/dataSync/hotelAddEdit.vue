@@ -129,6 +129,20 @@
                         </template>
                     </el-table-column>
 
+
+                    <el-table-column
+                            prop="floatPrice"
+                            label="设置浮动价格"
+                            min-width="150">
+                        <template slot-scope="scope">
+                            <el-select v-model="scope.row.floatType" filterable placeholder="请选择" style="width: 60px" >
+                                <el-option key="add" label="加" value="add"></el-option>
+                            </el-select>
+                            <el-input v-model="scope.row.floatPrice"  placeholder="浮动价格"  style="width: 60px" /> 元
+                        </template>
+                    </el-table-column>
+
+
                     <el-table-column
                             label="当前绑定计划的今日价格示例"
                             min-width="200"
@@ -136,7 +150,9 @@
                         <template slot-scope="scope">
                             <div v-if="scope.row.ltRoomPlanInfo != undefined">
                                 <span class="showPlanSpan">日期：{{scope.row.ltRoomPlanInfo.data}} </span>
-                                <span class="showPlanSpan">价格：{{scope.row.ltRoomPlanInfo.price}}元</span>
+                                <span v-if="scope.row.floatPrice > 0">价格：{{scope.row.ltRoomPlanInfo.price}}元 + {{scope.row.floatPrice}}元</span>
+                                <span v-else class="showPlanSpan">价格：{{scope.row.ltRoomPlanInfo.price}}元</span>
+
                                 <span class="showPlanSpan">早餐数量：{{showBackFastLabel(scope.row.ltRoomPlanInfo.breakfast)}}</span>
                                 <span class="showPlanSpan">房态：{{showRoomStatus(scope.row.ltRoomPlanInfo.statu)}}</span>
                             </div>

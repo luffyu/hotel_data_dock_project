@@ -19,4 +19,16 @@ public class LtRoomDict {
      * 龙腾的价格计划Id
      */
     private String ltPlatKey;
+
+
+    /**
+     * 浮动的价格
+     */
+    private Double floatPrice;
+
+    /**
+     * add表示新增 reduce表示减少
+     */
+    private String floatType;
+
 }

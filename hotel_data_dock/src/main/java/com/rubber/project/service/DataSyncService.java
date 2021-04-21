@@ -19,6 +19,7 @@ import com.rubber.project.model.LtRoomDict;
 import com.rubber.project.model.SyncRoomCreatModel;
 import com.rubber.project.model.enums.ExecType;
 import com.rubber.project.model.enums.HotelProjectErrCode;
+import com.rubber.project.model.enums.PriceFloatTypeEnums;
 import com.rubber.project.model.enums.SyncStatus;
 import com.rubber.project.xc.enmus.XcRoomStatusEnums;
 import com.rubber.project.xc.http.XcHttpUtils;
@@ -102,6 +103,10 @@ public class DataSyncService {
             ltRoomDict.setRoomContrastId(roomContrastConfig.getRoomContrastId());
             ltRoomDict.setLtRoomId(roomContrastConfig.getLtRoomId());
             ltRoomDict.setLtPlatKey(roomContrastConfig.getLtRoomPlanKey());
+
+            ltRoomDict.setFloatPrice(roomContrastConfig.getFloatPrice());
+            ltRoomDict.setFloatType(roomContrastConfig.getFloatType());
+
             ltRoomDictMap.put(xtRoomId,ltRoomDict);
         }
         dataSyncModel.setRoomIdDict(ltRoomDictMap);
@@ -158,16 +163,6 @@ public class DataSyncService {
             Integer xcHotelId = roomDict.getKey();
             LtRoomDict ltRoomDict = roomDict.getValue();
 
-//            LtRoomPlanResponse dictLtPlan = null;
-//            LtRoomResponse ltRoomResponse = ltDataMap.get(ltRoomDict.getLtRoomId());
-//            if (ltRoomResponse != null && CollUtil.isNotEmpty(ltRoomResponse.getRoomPlans())){
-//                if (StrUtil.isEmpty(ltRoomDict.getLtPlatKey())){
-//                    dictLtPlan = ltRoomResponse.getRoomPlans().get(0);
-//                }else {
-//                    Map<String, LtRoomPlanResponse> planMap = ltRoomResponse.getRoomPlans().stream().collect(Collectors.toMap(LtRoomPlanResponse::getRatePlanId, i -> i));
-//                    dictLtPlan = planMap.get(ltRoomDict.getLtPlatKey());
-//                }
-//            }
             List<LtRoomPlanResponse> needPushPlans = new ArrayList<>();
             LtRoomResponse ltRoomResponse = ltDataMap.get(ltRoomDict.getLtRoomId());
             if (ltRoomResponse != null && CollUtil.isNotEmpty(ltRoomResponse.getRoomPlans())){
@@ -180,7 +175,7 @@ public class DataSyncService {
                 }
             }
             for (LtRoomPlanResponse pushPlan:needPushPlans){
-                SyncRoomCreatModel roomCreatModel = doCreateLtSyncRoomInfo(xcHotelId,pushPlan);
+                SyncRoomCreatModel roomCreatModel = doCreateLtSyncRoomInfo(xcHotelId,pushPlan,ltRoomDict);
                 roomCreatModel.setRoomContrastId(ltRoomDict.getRoomContrastId());
                 roomCreatModel.setLxHotelId(dataSyncModel.getLtHotelId());
                 roomCreatModel.setXcHotelId(dataSyncModel.getXcHotelId());
@@ -252,7 +247,7 @@ public class DataSyncService {
         return xcHotelRoomSetBean;
     }
 
-    private SyncRoomCreatModel doCreateLtSyncRoomInfo(Integer roomId, LtRoomPlanResponse roomPlanResponse){
+    private SyncRoomCreatModel doCreateLtSyncRoomInfo(Integer roomId, LtRoomPlanResponse roomPlanResponse,LtRoomDict ltRoomDict){
         SyncRoomCreatModel syncRoomCreatModel = new SyncRoomCreatModel();
 
         //设置基本信息
@@ -290,7 +285,16 @@ public class DataSyncService {
 
             //同步价格
             XcRoomPrice xcRoomPrice = new XcRoomPrice();
-            xcRoomPrice.setRoomPrice(Double.valueOf(roomPlanResponse.getPrice()));
+
+            Double originPrice = Double.valueOf(roomPlanResponse.getPrice());
+            syncRoomCreatModel.setOriginPrice(originPrice);
+            if (PriceFloatTypeEnums.ADD.getKey().equals(ltRoomDict.getFloatType())){
+                originPrice += ltRoomDict.getFloatPrice();
+            }
+            if (PriceFloatTypeEnums.REDUCE.getKey().equals(ltRoomDict.getFloatType())){
+                originPrice -= ltRoomDict.getFloatPrice();
+            }
+            xcRoomPrice.setRoomPrice(originPrice);
             String breakfast = roomPlanResponse.getBreakfast();
             LtBreakfastEnums breakfastEnums = LtBreakfastEnums.getByCode(breakfast);
             xcRoomPrice.setBreakfast(breakfastEnums.getNum());
