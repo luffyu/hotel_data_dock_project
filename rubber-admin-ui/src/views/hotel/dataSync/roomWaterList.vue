@@ -49,6 +49,17 @@
                 </template>
             </el-table-column>
 
+
+            <el-table-column
+                    prop="syncStatus"
+                    label="价格详情"
+                    width="150">
+                <template slot-scope="scope">
+                    <div>原始价格:{{scope.row.originPrice > 0 ? scope.row.originPrice : '--'}}元 </div>
+                    <div>浮动价格：+{{scope.row.floatPrice != undefined ? scope.row.floatPrice : 0}}元 </div>
+                    <div>设置价格：{{scope.row.pushPrice}} 元</div>
+                </template>
+            </el-table-column>
             <el-table-column
                     prop="syncStatus"
                     label="同步状态"
@@ -135,6 +146,11 @@
         },
         created() {
             this.queryList()
+        },
+        watch:{
+            openWaterRoomInfo:function () {
+                this.queryList()
+            }
         },
         methods: {
             handlerSearch(){

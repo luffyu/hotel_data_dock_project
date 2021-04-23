@@ -33,6 +33,20 @@
             </el-table-column>
 
             <el-table-column
+                    prop="floatPrice"
+                    label="当时设置浮动价格"
+                    width="80"
+            >
+                <template slot-scope="scope" >
+                    <span>
+                        {{scope.row.floatType === 'add' ? '+':'-'}}
+                        {{scope.row.floatPrice}}元
+                    </span>
+                </template>
+            </el-table-column>
+
+
+            <el-table-column
                     prop="lastSyncTime"
                     label="最后一次同步时间"
                     min-width="100" >
@@ -48,18 +62,6 @@
                 </template>
             </el-table-column>
 
-            <el-table-column
-                    prop="floatPrice"
-                    label="价格浮动"
-                    width="80"
-                    >
-                <template slot-scope="scope" >
-                    <span>
-                        {{scope.row.floatType === 'add' ? '+':'-'}}
-                        {{scope.row.floatPrice}}元
-                    </span>
-                </template>
-            </el-table-column>
 
             <el-table-column
                     prop="lastSyncStatus"
@@ -192,6 +194,9 @@
                 let jsonInfo = JSON.parse(data);
                 if (jsonInfo.roomPriceModel != undefined){
                     msg += " 价格:" + jsonInfo.roomPriceModel.roomPrice+"元，";
+                    if (jsonInfo.floatPrice >= 0){
+                        msg += " 其中浮动: +" + jsonInfo.floatPrice+"元，";
+                    }
                     msg += " 早餐数:" + jsonInfo.roomPriceModel.breakfast+"份，";
                 }
                 if (jsonInfo.roomStatusModel != undefined){

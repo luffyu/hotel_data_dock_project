@@ -1,7 +1,9 @@
 package com.rubber.project.service;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rubber.admin.core.base.BaseAdminService;
 import com.rubber.admin.core.tools.ServletUtils;
@@ -74,7 +76,18 @@ public class HotelRoomSyncExecWaterService extends BaseAdminService<HotelRoomSyn
         if (hotelRoomSyncExecWater.getRoomContrastId() != null){
             RoomContrastConfig roomContrastConfig = roomContrastConfigService.getById(hotelRoomSyncExecWater.getRoomContrastId());
             if (roomContrastConfig != null){
-                roomContrastConfig.setLastSyncInfo(hotelRoomSyncExecWater.getSyncRequestInfo());
+                String syncRequestInfo = hotelRoomSyncExecWater.getSyncRequestInfo();
+                if (StrUtil.isNotEmpty(syncRequestInfo)){
+                    JSONObject jsonObject = JSONObject.parseObject(syncRequestInfo);
+                    if (hotelRoomSyncExecWater.getFloatPrice() != null){
+                        jsonObject.put("floatPrice",hotelRoomSyncExecWater.getFloatPrice());
+                    }
+                    if (hotelRoomSyncExecWater.getFloatType() != null){
+                        jsonObject.put("floatType",hotelRoomSyncExecWater.getFloatType());
+                    }
+                    syncRequestInfo = jsonObject.toJSONString();
+                }
+                roomContrastConfig.setLastSyncInfo(syncRequestInfo);
                 roomContrastConfig.setLastSyncStatus(hotelRoomSyncExecWater.getSyncStatus());
                 roomContrastConfig.setLastSyncTime(hotelRoomSyncExecWater.getSyncTime());
                 roomContrastConfig.setRemark(hotelRoomSyncExecWater.getRemark());
