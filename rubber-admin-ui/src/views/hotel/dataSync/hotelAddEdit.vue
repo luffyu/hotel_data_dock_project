@@ -132,7 +132,7 @@
 
                     <el-table-column
                             prop="floatPrice"
-                            label="设置浮动价格-2"
+                            label="设置浮动价格"
                             min-width="150">
                         <template slot-scope="scope">
                             <el-select v-model="scope.row.floatType" filterable placeholder="请选择" style="width: 60px" >
