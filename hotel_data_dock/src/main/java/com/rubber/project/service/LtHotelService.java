@@ -6,10 +6,10 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.rubber.project.exception.HotelDataRequestException;
 import com.rubber.project.exception.RequestParamsException;
-import com.rubber.project.lt.http.AsmxHttpUtil;
-import com.rubber.project.lt.request.LtHotelRoomRequest;
-import com.rubber.project.lt.response.LtHotelResponse;
-import com.rubber.project.lt.response.LtHotelResult;
+import com.rubber.project.handler.impl.origin.lt.http.AsmxHttpUtil;
+import com.rubber.project.handler.impl.origin.lt.request.LtHotelRoomRequest;
+import com.rubber.project.handler.impl.origin.lt.response.LtHotelResponse;
+import com.rubber.project.handler.impl.origin.lt.response.LtHotelResult;
 import com.rubber.project.model.enums.HotelProjectErrCode;
 import com.rubber.project.model.enums.SyncStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -44,11 +44,6 @@ public class LtHotelService {
         }
     }
 
-
-
-    public LtHotelResponse getHotelInfoById(String hotelId) throws Exception {
-        return getHotelInfoById(hotelId,1);
-    }
 
     /**
      * 通过酒店id 查询龙腾的接口数据信息

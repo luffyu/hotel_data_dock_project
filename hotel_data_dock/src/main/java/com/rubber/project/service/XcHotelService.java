@@ -3,9 +3,9 @@ package com.rubber.project.service;
 import com.rubber.project.exception.RequestParamsException;
 import com.rubber.project.model.enums.HotelProjectErrCode;
 import com.rubber.project.model.enums.SyncStatus;
-import com.rubber.project.xc.http.XcHttpUtils;
-import com.rubber.project.xc.response.XcHotelInfoResponse;
-import com.rubber.project.xc.response.XcRoomInfoResponse;
+import com.rubber.project.handler.impl.target.xc.http.XcHttpUtils;
+import com.rubber.project.handler.impl.target.xc.response.XcHotelInfoResponse;
+import com.rubber.project.handler.impl.target.xc.response.XcRoomInfoResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

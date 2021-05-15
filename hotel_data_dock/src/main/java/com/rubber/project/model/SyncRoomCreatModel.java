@@ -2,7 +2,7 @@ package com.rubber.project.model;
 
 import com.rubber.project.model.enums.ExecType;
 import com.rubber.project.model.enums.SyncStatus;
-import com.rubber.project.xc.request.room.XcRoomData;
+import com.rubber.project.handler.impl.target.xc.request.room.XcRoomData;
 import lombok.Data;
 
 import java.time.LocalDateTime;

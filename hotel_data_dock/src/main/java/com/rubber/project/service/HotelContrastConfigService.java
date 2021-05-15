@@ -10,7 +10,6 @@ import com.rubber.project.entity.RoomContrastConfig;
 import com.rubber.project.exception.RequestParamsException;
 import com.rubber.project.mapper.HotelContrastConfigMapper;
 import com.rubber.project.model.enums.HotelProjectErrCode;
-import com.rubber.project.model.enums.SyncStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,13 +136,4 @@ public class HotelContrastConfigService extends BaseAdminService<HotelContrastCo
         }
     }
 
-    public void updateLastSyncError(Integer hotelContrastId, SyncStatus syncStatus,String remark){
-        HotelContrastConfig hotelContrastConfig = getById(hotelContrastId);
-        if (hotelContrastConfig != null){
-            hotelContrastConfig.setLastSyncStatus(syncStatus.getCode());
-            hotelContrastConfig.setLastSyncTime(LocalDateTime.now());
-            hotelContrastConfig.setRemark(remark);
-            updateById(hotelContrastConfig);
-        }
-    }
 }

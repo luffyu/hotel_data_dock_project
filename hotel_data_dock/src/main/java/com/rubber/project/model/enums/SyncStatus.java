@@ -16,6 +16,10 @@ public enum SyncStatus {
     XC_REQUEST_ERROR(4,"携程接口同步异常"),
     LT_REQUEST_ERROR(5,"龙腾接口拉取异常"),
 
+    LT_ROOM_IS_NULL(6,"龙腾房间不存在"),
+    LT_ROOM_PRICE_IS_NULL(7,"龙腾房间价格为空"),
+
+
     ;
     private Integer code;
 

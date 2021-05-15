@@ -185,6 +185,8 @@
                     "3": "异常",
                     "4": "携程接口同步异常",
                     "5": "龙腾接口拉取异常",
+                    "6":"龙腾房间不存在",
+                    "7":"龙腾房间为价格为空"
                 };
                 let syncStatueStr = syncStatue.toString();
                 return typeInfo[syncStatueStr];

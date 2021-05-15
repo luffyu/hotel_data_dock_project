@@ -1,8 +1,11 @@
 package com.rubber.project.entity;
 
-    import com.baomidou.mybatisplus.annotation.IdType;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.rubber.admin.core.base.BaseEntity;
+import com.rubber.project.handler.bean.HotelRoomDynamicBean;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -125,5 +128,20 @@ public class HotelRoomSyncExecWater extends BaseEntity {
      */
     private Integer pushStatus;
 
+
+    /**
+     * 数据源信息
+     */
+    @TableField(exist = false)
+    private HotelRoomDynamicBean originBean;
+
+
+    public void addRemark(String msg){
+        if (StrUtil.isNotEmpty(this.remark)){
+            this.remark += ";" + msg;
+        }else {
+            this.remark = msg;
+        }
+    }
 
 }

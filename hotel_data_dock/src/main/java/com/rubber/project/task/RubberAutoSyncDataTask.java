@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rubber.project.config.TaskDataConfig;
 import com.rubber.project.entity.HotelContrastConfig;
 import com.rubber.project.model.enums.ExecType;
-import com.rubber.project.service.DataSyncService;
 import com.rubber.project.service.HotelContrastConfigService;
+import com.rubber.project.service.HotelDataSyncHandlerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,13 +27,15 @@ public class RubberAutoSyncDataTask {
 
     @Autowired
     private HotelContrastConfigService hotelContrastConfigService;
+
+
     @Autowired
-    private DataSyncService dataSyncService;
+    private HotelDataSyncHandlerService hotelDataSyncHandlerService;
 
 
     @Scheduled(cron = "0 0/30 * * * ?")
     public void handlerTask(){
-        doHandlerTask();
+        //doHandlerTask();
     }
 
 
@@ -44,7 +46,7 @@ public class RubberAutoSyncDataTask {
             if (CollUtil.isNotEmpty(hotelContrastConfigs)){
                 hotelContrastConfigs.forEach(i->{
                     try {
-                        boolean result = dataSyncService.startSyncDataByContrast(i, ExecType.AUTO_EXEC);
+                        boolean result = hotelDataSyncHandlerService.startSync(i, ExecType.AUTO_EXEC);
                         log.info("酒店配置{},xc酒店id:{},lt酒店id:{} 执行结果{}",i.getHotelContrastId(),i.getXcHotelId(),i.getLtHotelId(),result);
                     } catch (Exception e) {
                         log.error("酒店配置{},xc酒店id:{},lt酒店id:{} 执行异常，msg={}",i.getHotelContrastId(),i.getXcHotelId(),i.getLtHotelId(),e.getMessage());

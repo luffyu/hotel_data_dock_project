@@ -1,6 +1,6 @@
 package com.rubber.project.model;
 
-import com.rubber.project.xc.response.XcRoomInfoResponse;
+import com.rubber.project.handler.impl.target.xc.response.XcRoomInfoResponse;
 import lombok.Data;
 
 import java.util.List;

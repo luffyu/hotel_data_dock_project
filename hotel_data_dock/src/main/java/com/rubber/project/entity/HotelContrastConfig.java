@@ -1,15 +1,16 @@
 package com.rubber.project.entity;
 
-    import com.baomidou.mybatisplus.annotation.IdType;
-    import com.baomidou.mybatisplus.annotation.TableField;
-    import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.rubber.admin.core.base.BaseEntity;
+import com.rubber.project.model.enums.ExecType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
-    import java.util.List;
+import java.util.List;
 
 /**
 * <p>
@@ -135,5 +136,11 @@ public class HotelContrastConfig extends BaseEntity {
      */
     @TableField(exist = false)
     private String roomContrastListStr;
+
+    /**
+     * 当前执行的类型
+     */
+    @TableField(exist = false)
+    private ExecType handlerExecType;
 
 }
