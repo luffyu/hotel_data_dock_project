@@ -66,7 +66,7 @@ public class HotelDataSyncHandlerService {
         OriginRequest request = new OriginRequest();
         request.setHotelId(contrastConfig.getLtHotelId());
         request.setStartDate(new Date());
-        request.setEndDate(DateUtil.offsetDay(new Date(),4));
+        request.setEndDate(DateUtil.offsetDay(new Date(),20));
         request.setNow(LocalDateTime.now());
         request.setExecType(execType);
 

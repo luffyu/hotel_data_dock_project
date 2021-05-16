@@ -57,7 +57,6 @@ public class XcHttpUtils {
         data.add("RoomTypeSimpleEntity");
         request.setReturnDataTypeList(data);
         JSONObject params = JSON.parseObject(JSON.toJSONString(request));
-        System.out.println(params.toJSONString());
         String urlStr = URL + "gethotelroomstaticinfo";
         String responseStr =  doRequest(urlStr,createHeader(), JSON.parseObject(JSON.toJSONString(request)));
         JSONObject responseJSON = JSON.parseObject(responseStr);
@@ -199,33 +198,6 @@ public class XcHttpUtils {
 
 
     public static void main(String[] args) throws Exception {
-
-        //System.out.println(getHotelList());
-        System.out.println();
-        System.out.println();
-        System.out.println();
-////        System.out.println(getCountryList());
-
-//        System.out.println();
-
-
-        //System.out.println(getBasicRoomList(69330011));
-        //System.out.println(getHotlRoomStaticInfo(72235126));
-
-//        XcHotelRoomSetBean roomSetBean = new XcHotelRoomSetBean();
-//        List<XcRoomData> roomData = new ArrayList<>();
-//        roomData.add(new XcRoomData());
-//        roomSetBean.setRoomDataEntitys(roomData);
-//        System.out.println(setRoomPrice(roomSetBean));
-
-        //System.out.println(getHotlRoomStaticInfo(69330011));
-
-        //System.out.println(getBasicRoomList(72320189));
-
-//        List<XcRoomInfoResponse> data = getHotlRoomStaticInfo(69312428);
-//        System.out.println(data);
-
-
         System.out.println(getHotelInfo(69312428));
 
     }

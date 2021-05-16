@@ -144,7 +144,7 @@
 
 
     <build>
-        <finalName>hotel_data_dock_2.0.5</finalName>
+        <finalName>hotel_data_dock_3.0.1</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
