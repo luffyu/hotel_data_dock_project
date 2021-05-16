@@ -2,10 +2,10 @@ package com.rubber.project.controller;
 
 import cn.hutool.luffyu.util.result.ResultMsg;
 import com.rubber.project.handler.impl.origin.lt.response.LtHotelResponse;
+import com.rubber.project.handler.impl.target.xc.response.XcHotelInfoResponse;
 import com.rubber.project.model.enums.HotelProjectErrCode;
 import com.rubber.project.service.LtHotelService;
 import com.rubber.project.service.XcHotelService;
-import com.rubber.project.handler.impl.target.xc.response.XcHotelInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
