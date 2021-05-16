@@ -44,9 +44,13 @@ public class AutoClearExecWaterTask {
         log.info("开启清除{}之前的流水数据",dateTime.toString());
         try {
             QueryWrapper<HotelRoomSyncExecWater> queryWrapper = new QueryWrapper<>();
-            queryWrapper.le("exec_time", dateTime);
-            boolean remove = syncExecWaterService.remove(queryWrapper);
-            log.info("清除{}之前的流水数据结果{}",dateTime.toString(),remove);
+            queryWrapper.le("sync_time", dateTime);
+            int count = syncExecWaterService.count(queryWrapper);
+            boolean remove = false;
+            if (count > 0){
+                remove = syncExecWaterService.remove(queryWrapper);
+            }
+            log.info("清除{}之前的{}条流水数据结果为{}",dateTime.toString(),count,remove);
         }catch (Exception e){
             log.info("清除{}之前的流水数据出现异常,msg:{}",dateTime.toString(),e.getMessage());
         }
