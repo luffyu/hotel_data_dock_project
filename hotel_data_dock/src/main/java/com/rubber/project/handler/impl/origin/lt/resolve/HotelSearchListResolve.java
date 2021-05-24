@@ -90,30 +90,4 @@ public class HotelSearchListResolve extends BaseResolve {
     }
 
 
-
-//    private HotelSearchListBean doResolveSearchListBean(MessageElement messageElement){
-//        HotelSearchListBean hotelSearchListBean = new HotelSearchListBean();
-//        try{
-//            Class<?> clz = hotelSearchListBean.getClass();
-//            Field[] fields = hotelSearchListBean.getClass().getDeclaredFields();
-//            for (Field field:fields){
-//                if (field.getGenericType().toString().startsWith("java.util.List")){
-//                    continue;
-//                }
-//                String name = field.getName();
-//                name = StrUtil.upperFirst(name);
-//                MessageElement childElement = messageElement.getChildElement(new QName(name));
-//                if (childElement != null){
-//                    Method method = clz.getDeclaredMethod("set"+name, String.class);
-//                    method.invoke(hotelSearchListBean,childElement.getValue());
-//                }
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return hotelSearchListBean;
-//    }
-
-
-
  }

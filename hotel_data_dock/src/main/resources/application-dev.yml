@@ -34,7 +34,7 @@ spring:
 rubber:
   security:
     openInterfaceAuth: false
-    permitAll: /login,/test/sys-time,/home,/,/api/*
+    permitAll: /login,/test/sys-time,/home,/,/api/**
     logUrl: /logout
     defaultPermissionUrl: /u/*
   hotel:

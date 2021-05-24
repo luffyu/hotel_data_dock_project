@@ -76,9 +76,6 @@ public class AsmxHttpUtil {
         searchConditions.addElement("Lang").setText("GB");
         searchConditions.addElement("SortCode").setText("RE");
         searchConditions.addElement("SortType").setText("DESC");
-
-        log.info("HotelListSearch request = {}",document.asXML());
-
         return doRequest(document.asXML());
     }
 

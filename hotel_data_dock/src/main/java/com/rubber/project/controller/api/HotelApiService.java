@@ -24,7 +24,7 @@ public class HotelApiService {
     private LtOriginDataHandler ltOriginDataHandler;
 
 
-    @GetMapping("/hotel/info")
+    @GetMapping("/hotel/search")
     public ResultMsg queryHotelInfo(LtHotelRequest request) throws Exception {
         LtHotelSearchListResponse hotelSearch = ltOriginDataHandler.getHotelSearch(request);
         return ResultMsg.success(hotelSearch);
