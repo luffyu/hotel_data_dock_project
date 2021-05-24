@@ -2,6 +2,7 @@ package com.rubber.project.controller;
 
 import cn.hutool.luffyu.util.result.ResultMsg;
 import com.rubber.project.task.AutoClearExecWaterTask;
+import com.rubber.project.task.RubberAutoSyncDataTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +19,19 @@ public class TestAdminController {
     @Autowired
     private AutoClearExecWaterTask autoClearExecWaterTask;
 
+    @Autowired
+    private RubberAutoSyncDataTask rubberAutoSyncDataTask;
 
     @PostMapping("/clear_water")
     public ResultMsg clearWater(){
         autoClearExecWaterTask.doClearExecWater();
+        return ResultMsg.success();
+    }
+
+
+    @PostMapping("/auth_task")
+    public ResultMsg authTask(){
+        rubberAutoSyncDataTask.doHandlerTask();
         return ResultMsg.success();
     }
 }

@@ -31,6 +31,13 @@ public class LtHotelRequest extends LtBaseRequest {
     private String hotelId;
 
 
+    /**
+     * 入住的开始结束时间
+     */
+    private String  checkInStr;
+    private String checkOutStr;
+
+
     public String getCountryIdEffective() {
         return countryId == null ? "" : countryId;
     }

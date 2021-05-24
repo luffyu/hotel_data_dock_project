@@ -1,13 +1,14 @@
 package com.rubber.project.handler.impl.origin.lt.http;
 
 import cn.hutool.core.date.DateUtil;
-import com.alibaba.fastjson.JSON;
+import com.rubber.project.config.ConfigUtils;
 import com.rubber.project.handler.impl.origin.lt.request.LtBaseRequest;
 import com.rubber.project.handler.impl.origin.lt.request.LtHotelRequest;
 import com.rubber.project.handler.impl.origin.lt.request.LtHotelRoomRequest;
 import com.rubber.project.handler.impl.origin.lt.resolve.HotelResponseResolve;
 import com.rubber.project.handler.impl.origin.lt.resolve.HotelRoomResponseResolve;
 import com.rubber.project.handler.impl.origin.lt.response.LtHotelResult;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.axis.Message;
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
@@ -21,13 +22,13 @@ import org.w3c.dom.Node;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ParameterMode;
 import javax.xml.soap.SOAPBody;
-import java.util.Date;
 
 
 /**
  * @author luffyu
  * Created on 2021/4/5
  */
+@Slf4j
 public class AsmxHttpUtil {
 
     /**
@@ -36,8 +37,6 @@ public class AsmxHttpUtil {
      * 可以通过 http://202.104.101.32:8077/RESTServer.asmx?wsdl 来查看暴露的服务
      * 正式环境地址为：http://lvtianxia.dingfangyi.com/RESTSERVER.asmx
      */
-    //private final static String URL = "http://202.104.101.32:8077/RESTServer.asmx";
-    private final static String URL = "http://lvtianxia.dingfangyi.com/RESTSERVER.asmx";
     private final static String SOAP_ACTION = "http://tempuri.org/GetXmlData";
     private final static String TARGET_NAMESPACE = "http://tempuri.org/";
     private final static String OPTION_NAME = "GetXmlData";
@@ -57,6 +56,30 @@ public class AsmxHttpUtil {
         searchConditions.addElement("Lang").setText("GB");
         MessageElement response =  doRequest(document.asXML());
         return HotelResponseResolve.resolve(response);
+    }
+
+
+
+    public static MessageElement listHotelSearch(LtHotelRequest request) throws Exception {
+        request.setActionName("HotelListSearch");
+        Document document = getDefaultHandlerData(request);
+        Element root = document.getRootElement();
+        Element searchConditions = root.addElement("SearchConditions");
+        searchConditions.addElement("CountryId").setText(request.getCountryIdEffective());
+        searchConditions.addElement("ProvinceId").setText(request.getProvinceIdEffective());
+        searchConditions.addElement("CityId").setText(request.getCityIdEffective());
+        searchConditions.addElement("HotelId").setText(request.getHotelIdEffective());
+        Element stayDateRange = searchConditions.addElement("StayDateRange");
+        stayDateRange.addElement("CheckIn").setText(request.getCheckInStr());
+        stayDateRange.addElement("CheckOut").setText(request.getCheckOutStr());
+
+        searchConditions.addElement("Lang").setText("GB");
+        searchConditions.addElement("SortCode").setText("RE");
+        searchConditions.addElement("SortType").setText("DESC");
+
+        log.info("HotelListSearch request = {}",document.asXML());
+
+        return doRequest(document.asXML());
     }
 
     /**
@@ -90,12 +113,14 @@ public class AsmxHttpUtil {
      * 发送请求值
      */
     private static MessageElement doRequest(String xmlStr) throws Exception {
+        log.info("request = {}",xmlStr);
         //实例化访问对象
         Service service = new Service();
         //实例化调用对象
         Call call = (Call) service.createCall();
         //在调用对象中添加WebService地址
-        call.setTargetEndpointAddress(new java.net.URL(URL));
+        String ltUrl = ConfigUtils.getHotelData().getLtUrl() + "/RESTServer.asmx";
+        call.setTargetEndpointAddress(new java.net.URL(ltUrl));
         call.setOperationName(new QName(TARGET_NAMESPACE, OPTION_NAME));
 
         Object[] paramValues = new Object[1];
@@ -135,19 +160,11 @@ public class AsmxHttpUtil {
         actionName.setText(baseRequest.getActionName());
 
         Element identityInfo = root.addElement("IdentityInfo");
-        //测试环境1
-//        identityInfo.addElement("AppId").setText("1");
-//        identityInfo.addElement("SecurityKey").setText("369b469c-51b2-43cd-9677-934ca17f2651");
-//        identityInfo.addElement("UserName").setText("EN000001");
-//        identityInfo.addElement("PassWord").setText("E10ADC3949BA59ABBE56E057F20F883E");
-//        identityInfo.addElement("Signature").setText("RU4wMDAwMDFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRTM2OWI0NjljLTUxYjItNDNjZC05Njc3LTkzNGNhMTdmMjY1MQ==");
-
-        //正式环境s
-        identityInfo.addElement("AppId").setText("707");
-        identityInfo.addElement("SecurityKey").setText("d34ff5c2-6aa0-481d-a4df-72f6945b0005");
-        identityInfo.addElement("UserName").setText("BG100011");
-        identityInfo.addElement("PassWord").setText("e10adc3949ba59abbe56e057f20f883e");
-        identityInfo.addElement("Signature").setText("QkcxMDAwMTFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRWQzNGZmNWMyLTZhYTAtNDgxZC1hNGRmLTcyZjY5NDViMDAwNQ==");
+        identityInfo.addElement("AppId").setText(ConfigUtils.getHotelData().getLtAppId());
+        identityInfo.addElement("SecurityKey").setText(ConfigUtils.getHotelData().getLtSecurityKey());
+        identityInfo.addElement("UserName").setText(ConfigUtils.getHotelData().getLtUserName());
+        identityInfo.addElement("PassWord").setText(ConfigUtils.getHotelData().getLtPassWord());
+        identityInfo.addElement("Signature").setText(ConfigUtils.getHotelData().getLtSignature());
 
         Element scrollingInfo = root.addElement("ScrollingInfo");
         //50:默认;40;全部查询;30:分页查询
@@ -176,13 +193,19 @@ public class AsmxHttpUtil {
     public static void main(String[] args) throws Exception {
 //        LtHotelResult result = getHotelSearch(new LtHotelRequest());
 //        System.out.println(JSON.toJSONString(result));
-//
-        LtHotelRoomRequest roomRequest = new LtHotelRoomRequest();
-        roomRequest.setHotelId("1574");
-        roomRequest.setCheckIn(new Date());
-        roomRequest.setCheckOut(DateUtil.offsetDay(new Date(),1));
-        LtHotelResult hotelInfoPrice = getHotelInfoPrice(roomRequest);
-        System.out.println(JSON.toJSONString(hotelInfoPrice));
+////
+//        LtHotelRoomRequest roomRequest = new LtHotelRoomRequest();
+//        roomRequest.setHotelId("1574");
+//        roomRequest.setCheckIn(new Date());
+//        roomRequest.setCheckOut(DateUtil.offsetDay(new Date(),1));
+//        LtHotelResult hotelInfoPrice = getHotelInfoPrice(roomRequest);
+//        System.out.println(JSON.toJSONString(hotelInfoPrice));
+
+//        LtHotelRoomRequest roomRequest = new LtHotelRoomRequest();
+//        roomRequest.setProvinceId("0100");
+//        roomRequest.setCityId("0101");
+//        LtHotelResult hotelSearch = getHotelSearch(roomRequest);
+//        System.out.println(hotelSearch);
 
     }
 }

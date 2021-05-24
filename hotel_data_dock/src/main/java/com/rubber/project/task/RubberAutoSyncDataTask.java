@@ -2,7 +2,7 @@ package com.rubber.project.task;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.rubber.project.config.TaskDataConfig;
+import com.rubber.project.config.HotelDataConfig;
 import com.rubber.project.entity.HotelContrastConfig;
 import com.rubber.project.model.enums.ExecType;
 import com.rubber.project.service.HotelContrastConfigService;
@@ -23,7 +23,7 @@ import java.util.List;
 public class RubberAutoSyncDataTask {
 
     @Autowired
-    private TaskDataConfig taskDataConfig;
+    private HotelDataConfig taskDataConfig;
 
     @Autowired
     private HotelContrastConfigService hotelContrastConfigService;
@@ -35,20 +35,21 @@ public class RubberAutoSyncDataTask {
 
     @Scheduled(cron = "0 0/30 * * * ?")
     public void handlerTask(){
-        doHandlerTask();
+        //doHandlerTask();
     }
 
 
-    private synchronized void doHandlerTask(){
+    public synchronized void doHandlerTask(){
         log.info("开启执行定时任务");
         if (taskDataConfig.isOpenTask()){
             List<HotelContrastConfig> hotelContrastConfigs = queryAllConfigHotel();
             if (CollUtil.isNotEmpty(hotelContrastConfigs)){
                 hotelContrastConfigs.forEach(i->{
                     try {
-                        boolean result = hotelDataSyncHandlerService.startSync(i, ExecType.AUTO_EXEC);
+                        boolean result = hotelDataSyncHandlerService.startSync(i, ExecType.MANUAL_EXEC);
                         log.info("酒店配置{},xc酒店id:{},lt酒店id:{} 执行结果{}",i.getHotelContrastId(),i.getXcHotelId(),i.getLtHotelId(),result);
                     } catch (Exception e) {
+                        e.printStackTrace();
                         log.error("酒店配置{},xc酒店id:{},lt酒店id:{} 执行异常，msg={}",i.getHotelContrastId(),i.getXcHotelId(),i.getLtHotelId(),e.getMessage());
                     }
                 });

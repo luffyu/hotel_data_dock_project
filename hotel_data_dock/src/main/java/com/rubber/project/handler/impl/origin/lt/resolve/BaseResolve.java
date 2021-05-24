@@ -5,6 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.axis.message.MessageElement;
 
+import javax.xml.namespace.QName;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -41,6 +44,28 @@ public class BaseResolve {
         }else if (StrUtil.isNotEmpty(element.getValue())){
             jsonObject.put(element.getName(),element.getValue());
         }
+    }
+
+
+    protected <T> T doResolveLandmarkBean(T object,Class<?> clz,MessageElement messageElement){
+        try{
+            Field[] fields = clz.getDeclaredFields();
+            for (Field field:fields){
+                if (field.getGenericType().toString().startsWith("java.util.List")){
+                    continue;
+                }
+                String name = field.getName();
+                name = StrUtil.upperFirst(name);
+                MessageElement childElement = messageElement.getChildElement(new QName(name));
+                if (childElement != null){
+                    Method method = clz.getDeclaredMethod("set"+name, String.class);
+                    method.invoke(object,childElement.getValue());
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return object;
     }
 
 }

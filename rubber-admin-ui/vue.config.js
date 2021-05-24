@@ -7,13 +7,13 @@ module.exports = {
     productionSourceMap: false,
     devServer: {
         host: "127.0.0.1",
-        port: 8081,
+        port: 38081,
         https: false,
 
         //系统管理的后台自定义配置
         proxy: {
             '/':{
-                target:'http://127.0.0.1:8081',
+                target:'http://127.0.0.1:38081',
                 changeOrigin:true,
                 pathRewrite:{
                     '/':'/'

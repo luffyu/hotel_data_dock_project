@@ -34,12 +34,19 @@ spring:
 rubber:
   security:
     openInterfaceAuth: false
-    permitAll: /login,/test/sys-time,/home,/
+    permitAll: /login,/test/sys-time,/home,/,/api/*
     logUrl: /logout
     defaultPermissionUrl: /u/*
-  task:
-    openTask: true
-    afterDaySize: 20
+
+  hotel:
+    openTask: false
+    ltUrl: http://lvtianxia.dingfangyi.com
+    ltAppId: 707
+    ltSecurityKey: d34ff5c2-6aa0-481d-a4df-72f6945b0005
+    ltUserName: BG100011
+    ltPassWord: e10adc3949ba59abbe56e057f20f883e
+    ltSignature: QkcxMDAwMTFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRWQzNGZmNWMyLTZhYTAtNDgxZC1hNGRmLTcyZjY5NDViMDAwNQ==
+
 
 
 mybatis-plus:

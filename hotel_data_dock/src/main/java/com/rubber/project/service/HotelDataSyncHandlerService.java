@@ -10,6 +10,7 @@ import com.rubber.project.handler.TargetDataHandler;
 import com.rubber.project.handler.request.OriginRequest;
 import com.rubber.project.model.enums.ExecType;
 import com.rubber.project.model.enums.HotelProjectErrCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Map;
  * @author luffyu
  * Created on 2021/5/13
  */
+@Slf4j
 @Service
 public class HotelDataSyncHandlerService {
 
@@ -56,11 +58,13 @@ public class HotelDataSyncHandlerService {
         if (contrastConfig == null){
             throw new RequestParamsException(HotelProjectErrCode.HOTEL_NOT_EXIST,null);
         }
+        log.info("startSync,id={},execType={}",contrastConfig.getHotelContrastId(),execType);
         if (ExecType.STOP_EXEC.getCode().equals(contrastConfig.getExecType())){
             throw new RequestParamsException(HotelProjectErrCode.HOTEL_IS_STOP_EXEC,null);
         }
         //获取到所有到房间配置
         List<RoomContrastConfig> roomContrastConfigs = roomContrastConfigService.queryByHotelContrastId(contrastConfig.getHotelContrastId());
+        log.info("读取的房间配置list为：{}",roomContrastConfigs == null ? 0:roomContrastConfigs.size());
 
         //读取配置信息 可能存在接口异常到情况
         OriginRequest request = new OriginRequest();
@@ -70,10 +74,13 @@ public class HotelDataSyncHandlerService {
         request.setNow(LocalDateTime.now());
         request.setExecType(execType);
 
+        log.info("开始获取源数据");
         Map<RoomContrastConfig, List<HotelRoomSyncExecWater>> roomInfoByOriginData = originDataHandler.getRoomInfoByOriginData(request, roomContrastConfigs);
         //会写数据
+        log.info("开始写入目标数据");
         targetDataHandler.writeToTarget(contrastConfig,roomInfoByOriginData);
         //写入流水
+        log.info("开始写入流水数据");
         doWriteWater(contrastConfig,roomInfoByOriginData);
         //写入流水
         return true;

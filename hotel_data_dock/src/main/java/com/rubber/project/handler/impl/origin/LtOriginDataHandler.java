@@ -3,7 +3,6 @@ package com.rubber.project.handler.impl.origin;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.rubber.admin.core.tools.ServletUtils;
 import com.rubber.project.entity.HotelRoomSyncExecWater;
 import com.rubber.project.entity.RoomContrastConfig;
 import com.rubber.project.exception.HotelDataRequestException;
@@ -11,23 +10,25 @@ import com.rubber.project.exception.RequestParamsException;
 import com.rubber.project.handler.OriginDataHandler;
 import com.rubber.project.handler.bean.HotelRoomBean;
 import com.rubber.project.handler.bean.HotelRoomDynamicBean;
-import com.rubber.project.handler.request.OriginRequest;
-import com.rubber.project.handler.response.OriginResponse;
 import com.rubber.project.handler.impl.origin.lt.enmus.LtRoomStatusEnums;
 import com.rubber.project.handler.impl.origin.lt.http.AsmxHttpUtil;
+import com.rubber.project.handler.impl.origin.lt.http.StaticHttpUtils;
+import com.rubber.project.handler.impl.origin.lt.request.LtHotelRequest;
 import com.rubber.project.handler.impl.origin.lt.request.LtHotelRoomRequest;
-import com.rubber.project.handler.impl.origin.lt.response.LtHotelResponse;
-import com.rubber.project.handler.impl.origin.lt.response.LtHotelResult;
-import com.rubber.project.handler.impl.origin.lt.response.LtRoomPlanResponse;
-import com.rubber.project.handler.impl.origin.lt.response.LtRoomResponse;
+import com.rubber.project.handler.impl.origin.lt.resolve.HotelSearchListResolve;
+import com.rubber.project.handler.impl.origin.lt.response.*;
+import com.rubber.project.handler.impl.target.xc.enmus.XcRoomStatusEnums;
+import com.rubber.project.handler.request.OriginRequest;
+import com.rubber.project.handler.response.OriginResponse;
 import com.rubber.project.model.enums.HotelProjectErrCode;
 import com.rubber.project.model.enums.PriceFloatTypeEnums;
 import com.rubber.project.model.enums.SyncStatus;
-import com.rubber.project.handler.impl.target.xc.enmus.XcRoomStatusEnums;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.axis.message.MessageElement;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import javax.xml.namespace.QName;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,6 +76,7 @@ public class LtOriginDataHandler implements OriginDataHandler {
     @Override
     public Map<RoomContrastConfig,List<HotelRoomSyncExecWater>> getRoomInfoByOriginData(OriginRequest request, List<RoomContrastConfig> roomContrastConfigs) throws HotelDataRequestException {
         OriginResponse originData = getOriginData(request);
+        log.info("获取龙腾的接口数据，request={},data={}",request,originData.getInterfaceStatus());
         //转换成map结构
         if (originData.getInterfaceStatus() != 0) {
             throw new HotelDataRequestException(String.valueOf(originData.getInterfaceStatus()),originData.getMsg(),null);
@@ -107,6 +109,46 @@ public class LtOriginDataHandler implements OriginDataHandler {
     }
 
 
+    public LtHotelSearchListResponse getHotelSearch(LtHotelRequest request) throws Exception {
+        request.setDisplayReq(30);
+        if (request.getPageNo() == null){
+            request.setPageNo(1);
+        }
+        if (request.getPageItems() == null){
+            request.setPageItems(10);
+        }
+        if (StrUtil.isEmpty(request.getCheckInStr()) || StrUtil.isEmpty(request.getCheckOutStr())) {
+            request.setCheckInStr(DateUtil.format(new Date(),"yyyy/MM/dd"));
+            request.setCheckOutStr(DateUtil.format(DateUtil.offsetDay(new Date(),1),"yyyy/MM/dd"));
+        }
+        log.info("getHotelSearch request = {}",request);
+        MessageElement messageElement = AsmxHttpUtil.listHotelSearch(request);
+        HotelSearchListResolve hotelSearchListResolve =new HotelSearchListResolve();
+        return hotelSearchListResolve.resolve(messageElement);
+    }
+
+
+
+    private void doResolve(MessageElement messageElement){
+        MessageElement actionName = messageElement.getChildElement(new QName("ActionName"));
+        log.info("ActionName = {}",actionName.getValue());
+
+        MessageElement messageInfo = messageElement.getChildElement(new QName("MessageInfo"));
+        log.info("Code = {}",messageInfo.getChildElement(new QName("Code")).getValue());
+        log.info("Description = {}",messageInfo.getChildElement(new QName("Description")).getValue());
+        MessageElement data = messageElement.getChildElement(new QName("Data"));
+        log.info("data = {}",data.getValue());
+        log.info(data.toString());
+    }
+
+
+
+
+    public LtCityInfoResult getLtCityInfo(){
+        return StaticHttpUtils.getStaticCityInfo();
+    }
+
+
     private HotelRoomSyncExecWater doCreatHotelRoomSyncExecWater(OriginRequest request,RoomContrastConfig roomContrastConfig,HotelRoomDynamicBean hotelRoomDynamicBean){
         HotelRoomSyncExecWater roomSyncExecWater = new HotelRoomSyncExecWater();
         roomSyncExecWater.setHotelContrastId(roomContrastConfig.getHotelContrastId());
@@ -116,8 +158,7 @@ public class LtOriginDataHandler implements OriginDataHandler {
         roomSyncExecWater.setExtParam("");
         roomSyncExecWater.setSyncTime(request.getNow());
         roomSyncExecWater.setExecType(request.getExecType().getCode());
-        Integer uid = ServletUtils.getLoginUserId();
-        roomSyncExecWater.setOperator(String.valueOf(uid == null ? "system" : uid));
+        roomSyncExecWater.setOperator("system");
         if (hotelRoomDynamicBean == null){
             roomSyncExecWater.setSyncRequestInfo("");
             roomSyncExecWater.setSyncStatus(SyncStatus.LT_ROOM_PRICE_IS_NULL.getCode());

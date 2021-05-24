@@ -34,11 +34,17 @@ spring:
 rubber:
   security:
     openInterfaceAuth: false
-    permitAll: /login,/test/sys-time,/home,/
+    permitAll: /login,/test/sys-time,/home,/,/api/*
     logUrl: /logout
     defaultPermissionUrl: /u/*
-  task:
-    openTask: true
+  hotel:
+    openTask: false
+    ltUrl: http://202.104.101.32:8077
+    ltAppId: 1
+    ltSecurityKey: 369b469c-51b2-43cd-9677-934ca17f2651
+    ltUserName: EN000001
+    ltPassWord: E10ADC3949BA59ABBE56E057F20F883E
+    ltSignature: RU4wMDAwMDFFMTBBREMzOTQ5QkE1OUFCQkU1NkUwNTdGMjBGODgzRTM2OWI0NjljLTUxYjItNDNjZC05Njc3LTkzNGNhMTdmMjY1MQ==
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**Mapper.xml
