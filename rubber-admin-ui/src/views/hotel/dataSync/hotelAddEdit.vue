@@ -304,6 +304,7 @@
                         let roomConfigInfo = {};
                         roomConfigInfo.xcRoomId = xcRoomId;
                         roomConfigInfo.xcRoomName = newConfigList[index].roomName;
+                        roomConfigInfo.floatType = "add";
                         this.configRoomList.push(roomConfigInfo);
                     }
                 }

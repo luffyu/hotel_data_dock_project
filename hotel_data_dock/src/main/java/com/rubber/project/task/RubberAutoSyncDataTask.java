@@ -35,7 +35,7 @@ public class RubberAutoSyncDataTask {
 
     @Scheduled(cron = "0 0/30 * * * ?")
     public void handlerTask(){
-        //doHandlerTask();
+        doHandlerTask();
     }
 
 
