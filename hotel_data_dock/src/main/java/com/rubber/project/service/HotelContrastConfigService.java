@@ -2,6 +2,7 @@ package com.rubber.project.service;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.rubber.admin.core.base.BaseAdminService;
 import com.rubber.admin.core.tools.ServletUtils;
 import com.rubber.project.entity.HotelContrastConfig;
@@ -134,6 +135,19 @@ public class HotelContrastConfigService extends BaseAdminService<HotelContrastCo
                 updateById(hotelContrastConfig);
             }
         }
+    }
+
+
+    /**
+     * 通过酒店名称搜索
+     * @param hotelName 酒店名称
+     * @return 返回
+     */
+    public List<HotelContrastConfig> searchConfigHotelByName(String hotelName){
+        QueryWrapper<HotelContrastConfig> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("lt_hotel_name",hotelName);
+        queryWrapper.orderByDesc("hotel_contrast_id");
+        return list(queryWrapper);
     }
 
 }

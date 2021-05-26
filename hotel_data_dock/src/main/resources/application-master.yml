@@ -39,7 +39,7 @@ rubber:
     defaultPermissionUrl: /u/*
 
   hotel:
-    openTask: false
+    openTask: true
     ltUrl: http://lvtianxia.dingfangyi.com
     ltAppId: 707
     ltSecurityKey: d34ff5c2-6aa0-481d-a4df-72f6945b0005
