@@ -1,39 +1,45 @@
 <template>
   <div>
     <H5>系统首页</H5>
-<!--    <el-row :gutter="20">-->
 
+<!--    <el-row :gutter="20">-->
 <!--      <el-col :span="8">-->
 
-<!--        <el-card shadow="hover" class="mgb20" style="height:252px;">-->
+<!--        <el-card shadow="hover" class="mgb20" style="height:300px;">-->
 <!--          <div class="user-info">-->
 <!--            <img src="../assets/img/img.jpg" class="user-avator" alt />-->
 <!--            <div class="user-info-cont">-->
-<!--              <div class="user-info-name">{{userName}}</div>-->
-<!--              <div>{{roleName}}</div>-->
+<!--              <div class="user-info-name">{{userInfo.userName}}</div>-->
+<!--              <div>-->
+<!--                <span v-for="item in userRoles"> {{item.roleName}} </span>-->
+<!--              </div>-->
 <!--            </div>-->
 <!--          </div>-->
-<!--          <div class="user-info-list">-->
-<!--            上次登录时间：<span>{{loginTime}}</span>-->
-<!--          </div>-->
-<!--          <div class="user-info-list">-->
-<!--            上次登录地点：<span>{{loginAddress}}</span>-->
-<!--          </div>-->
-<!--          <div class="user-info-list">-->
-<!--            总的登陆次数：<span>{{loginCount}}</span>-->
+<!--          <div>-->
+<!--            <el-form ref="userInfo" :model="userInfo" label-width="100px">-->
+<!--                <el-form-item label="上次登录时间">-->
+<!--                  <span>{{userInfo.loginTime}}</span>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="总的登陆次数">-->
+<!--                  <span>{{userInfo.loginCount}}</span>次-->
+<!--                </el-form-item>-->
+<!--            </el-form>-->
 <!--          </div>-->
 <!--        </el-card>-->
 
-<!--        <el-card shadow="hover" style="height:252px;">-->
+<!--        <el-card shadow="hover" style="height:260px;">-->
 <!--          <div slot="header" class="clearfix">-->
-<!--            <span>语言详情</span>-->
-<!--          </div>Vue-->
-<!--          <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript-->
-<!--          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS-->
-<!--          <el-progress :percentage="13.7"></el-progress>HTML-->
+<!--            <span>执行属性相关信息</span>-->
+<!--          </div>-->
+<!--          成功-->
+<!--          <el-progress :percentage="71.3" color="#42b983"></el-progress>-->
+<!--          异常-->
+<!--          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>-->
+<!--          失败-->
+<!--          <el-progress :percentage="13.7"></el-progress>-->
+<!--          未知-->
 <!--          <el-progress :percentage="5.9" color="#f56c6c"></el-progress>-->
 <!--        </el-card>-->
-
 
 <!--      </el-col>-->
 
@@ -45,8 +51,8 @@
 <!--              <div class="grid-content grid-con-1">-->
 <!--                <i class="el-icon-lx-people grid-con-icon"></i>-->
 <!--                <div class="grid-cont-right">-->
-<!--                  <div class="grid-num">1234</div>-->
-<!--                  <div>用户访问量</div>-->
+<!--                  <div class="grid-num">{{configNumInfo.hotelConfigNum}}</div>-->
+<!--                  <div>总配置酒店数</div>-->
 <!--                </div>-->
 <!--              </div>-->
 <!--            </el-card>-->
@@ -56,8 +62,8 @@
 <!--              <div class="grid-content grid-con-2">-->
 <!--                <i class="el-icon-lx-notice grid-con-icon"></i>-->
 <!--                <div class="grid-cont-right">-->
-<!--                  <div class="grid-num">321</div>-->
-<!--                  <div>系统消息</div>-->
+<!--                  <div class="grid-num">{{configNumInfo.syncExecNum}}</div>-->
+<!--                  <div>同步执行总次数</div>-->
 <!--                </div>-->
 <!--              </div>-->
 <!--            </el-card>-->
@@ -67,25 +73,19 @@
 <!--              <div class="grid-content grid-con-3">-->
 <!--                <i class="el-icon-lx-goods grid-con-icon"></i>-->
 <!--                <div class="grid-cont-right">-->
-<!--                  <div class="grid-num">5000</div>-->
-<!--                  <div>数量</div>-->
+<!--                  <div class="grid-num">{{configNumInfo.userAccessNum}}</div>-->
+<!--                  <div>用户总访问次数</div>-->
 <!--                </div>-->
 <!--              </div>-->
 <!--            </el-card>-->
 <!--          </el-col>-->
 <!--        </el-row>-->
 
-<!--        <el-card shadow="hover" style="height:403px;">-->
+<!--        <el-card shadow="hover" style="height:460px;">-->
 <!--          <div slot="header" class="clearfix">-->
-<!--            <span>待办事项</span>-->
-<!--            <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>-->
+<!--            <span>最新执行公告</span>-->
 <!--          </div>-->
 <!--          <el-table :show-header="false" :data="todoList" style="width:100%;">-->
-<!--            <el-table-column width="40">-->
-<!--              <template slot-scope="scope">-->
-<!--                <el-checkbox v-model="scope.row.status"></el-checkbox>-->
-<!--              </template>-->
-<!--            </el-table-column>-->
 <!--            <el-table-column>-->
 <!--              <template slot-scope="scope">-->
 <!--                <div-->
@@ -95,10 +95,7 @@
 <!--              </template>-->
 <!--            </el-table-column>-->
 <!--            <el-table-column width="60">-->
-<!--              <template>-->
-<!--                <i class="el-icon-edit"></i>-->
-<!--                <i class="el-icon-delete"></i>-->
-<!--              </template>-->
+
 <!--            </el-table-column>-->
 <!--          </el-table>-->
 <!--        </el-card>-->
@@ -111,17 +108,19 @@
 
 
 <script>
-  import { getUserInfo } from "../utils/auth";
+  import { getUserInfoAndMenus } from '@/api/home/home';
+  import global from '@/utils/Global';
 
-    export default {
+  export default {
         data(){
           return {
-              userName : "余哈",
-              roleName : "",
-              loginTime : "",
-              loginIp:"",
-              loginAddress:"",
-              loginCount: 0,
+              userInfo:{},
+              userRoles:[],
+              configNumInfo:{
+                  hotelConfigNum:0,
+                  syncExecNum:0,
+                  userAccessNum:0,
+              },
               todoList: [
                 {
                   title: '今天要修复100个bug',
@@ -151,14 +150,17 @@
           }
         },
         created(){
-          const userInfo = getUserInfo();
-          this.userName = userInfo.userName;
-          this.roleName = userInfo.loginAccount;
-          this.loginTime = userInfo.loginTime;
-          this.loginIp = userInfo.loginIp;
-          this.loginAddress = '深圳';
-          this.loginCount = userInfo.loginCount;
-
+          // 获取用户的菜单信息
+          getUserInfoAndMenus().then(result => {
+            if(result.code === global.SUCCESS){
+              //设置用户的基本信息到cookie中
+              //获取用户的菜单信息
+              this.userInfo = result.data.sysUser;
+              this.userRoles = result.data.sysRoles;
+            }else {
+              this.$message.error(result.msg);
+            }
+          });
         }
     }
 </script>

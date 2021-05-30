@@ -4,6 +4,8 @@ const TokenKey = 'Login-Token';
 
 const User_Info_Key = 'User-Info-Key';
 
+const User_Data_Key = 'User-Data-Key';
+
 export function getToken() {
   return Cookies.get(TokenKey)
 }
@@ -21,16 +23,15 @@ export function loginOut() {
   removeUserInfo();
 }
 
-
-
-export function setUserInfo(userInfo) {
-  return Cookies.set(User_Info_Key, userInfo)
+export function setUserData(userData) {
+  return Cookies.set(User_Data_Key, userData)
 }
 
-export function getUserInfo() {
-  const userInfo = Cookies.get(User_Info_Key)
-  return JSON.parse(userInfo);
+export function getUserData() {
+  const userData = Cookies.get(User_Data_Key)
+  return JSON.parse(userData);
 }
+
 export function removeUserInfo() {
-  return Cookies.remove(User_Info_Key)
+  return Cookies.remove(User_Data_Key)
 }

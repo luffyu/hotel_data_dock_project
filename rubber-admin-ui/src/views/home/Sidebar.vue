@@ -57,7 +57,7 @@
 import bus from '../../api/home/bus';
 import { getUserInfoAndMenus } from '@/api/home/home';
 import global from '@/utils/Global';
-import {setUserInfo} from '@/utils/auth';
+import {setUserData} from '@/utils/auth';
 
 let index = 0;
 export default {
@@ -90,8 +90,7 @@ export default {
         getUserInfoAndMenus().then(result => {
             if(result.code === global.SUCCESS){
                 //设置用户的基本信息到cookie中
-                const userInfo = result.data.sysUser;
-                setUserInfo(userInfo);
+                setUserData(result.data);
                 //获取用户的菜单信息
                 const menuInfo = result.data.sysMenus;
                 //获取根目录的菜单信息
