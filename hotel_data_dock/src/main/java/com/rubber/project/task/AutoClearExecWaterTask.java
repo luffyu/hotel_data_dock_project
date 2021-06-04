@@ -24,7 +24,7 @@ public class AutoClearExecWaterTask {
     /**
      * 保留多少天的流水
      */
-    private static final int DAY_OFF_SET = -15;
+    private static final int DAY_OFF_SET = -3;
 
     @Autowired
     private HotelRoomSyncExecWaterService syncExecWaterService;
